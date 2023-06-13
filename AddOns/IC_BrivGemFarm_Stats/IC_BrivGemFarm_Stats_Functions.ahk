@@ -393,6 +393,9 @@ class IC_BrivGemFarm_Stats_Component
             currentSilverChests := g_SF.Memory.ReadChestCountByID(1) ; Start + Purchased + Dropped - Opened
             currentGoldChests := g_SF.Memory.ReadChestCountByID(2)
 
+            currentSilverChests := (currentSilverChests != "" ) ? currentSilverChests : 0 ; Start + Purchased + Dropped - Opened
+            currentGoldChests := (currentGoldChests != "" ) ? currentGoldChests : 0 ;
+
             if (IsObject(this.SharedRunData))
             {
                 GuiControl, ICScriptHub:, SilversGainedID, % currentSilverChests - this.SilverChestCountStart + this.SharedRunData.OpenedSilverChests ; current - Start + Opened = Purchased + Dropped
