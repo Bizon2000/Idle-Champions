@@ -174,8 +174,8 @@ Class AddonManagement
     CheckDependencieOrder(AddonNumber,PositionWanted){
         if(AddonNumber > PositionWanted){
             ; moving Up
-            LoopCounter:=PositionWanted
             for k, v in this.Addons[AddonNumber]["Dependencies"]{
+                LoopCounter:=PositionWanted
                 while(LoopCounter<AddonNumber){
                     if(v.Name=this.Addons[Loopcounter]["Name"] AND IC_VersionHelper_class.IsVersionSameOrNewer(this.Addons[Loopcounter]["Version"], v.Version)){
                         Return Loopcounter
@@ -316,14 +316,19 @@ Class AddonManagement
         }
         ; here we will enable all addons that needed to be added
         AddonSettings:= g_SF.LoadObjectFromJSON(this.AddonManagementConfigFile)
-        for k,v in AddonSettings {
-            if (k = "Addon Order"){
-                this.AddonOrder := v
+        this.AddonOrder := AddonSettings["Addon Order"]
+        if (IsObject(this.AddonOrder)){
+            for k, v in this.AddonOrder {
+                if (AddonSettings[v.Name].Enabled){
+                    this.EnableAddon(v.Name,v.Version)
+                }
             }
-            else {
+        }
+        else{
+            for k,v in AddonSettings {
                 if (v.Enabled){
                     this.EnableAddon(k,v.Version)
-                }     
+                }
             }
         }
 
